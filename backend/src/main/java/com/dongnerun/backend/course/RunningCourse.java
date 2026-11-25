@@ -42,4 +42,16 @@ public class RunningCourse {
 
     protected RunningCourse() {
     }
+
+    public RunningCourse(String name, CourseType type, double startLatitude, double startLongitude,
+                         int distanceMeters, boolean flat, String flatEvidence, String directions) {
+        this.name = name;
+        this.type = type;
+        this.startLatitude = startLatitude;
+        this.startLongitude = startLongitude;
+        this.distanceMeters = distanceMeters;
+        this.flat = flat;
+        this.flatEvidence = flatEvidence;
+        this.directions = directions;
+    }
 }
