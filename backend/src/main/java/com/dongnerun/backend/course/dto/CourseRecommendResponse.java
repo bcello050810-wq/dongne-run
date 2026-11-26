@@ -1,5 +1,6 @@
 package com.dongnerun.backend.course.dto;
 
+import com.dongnerun.backend.course.RunPlan;
 import com.dongnerun.backend.course.CourseType;
 import com.dongnerun.backend.course.RunningCourse;
 import java.net.URLEncoder;
@@ -20,10 +21,11 @@ public record CourseRecommendResponse(
         int distanceMeters,
         String directions,
         int distanceToStartMeters,
-        String mapUrl
+        String mapUrl,
+        RunPlan runPlan
 ) {
 
-    public static CourseRecommendResponse of(RunningCourse course, double distanceToStartMeters) {
+    public static CourseRecommendResponse of(RunningCourse course, double distanceToStartMeters, RunPlan runPlan) {
         return new CourseRecommendResponse(
                 course.getId(),
                 course.getName(),
@@ -33,7 +35,8 @@ public record CourseRecommendResponse(
                 course.getDistanceMeters(),
                 course.getDirections(),
                 (int) Math.round(distanceToStartMeters),
-                kakaoMapUrl(course)
+                kakaoMapUrl(course),
+                runPlan
         );
     }
 
