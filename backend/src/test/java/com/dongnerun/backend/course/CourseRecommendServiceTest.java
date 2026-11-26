@@ -33,7 +33,7 @@ class CourseRecommendServiceTest {
         RunningCourse middle = course("중간 코스", 37.5252, 126.9295);
         when(repository.findByFlatTrue()).thenReturn(List.of(far, near, middle));
 
-        List<CourseRecommendResponse> result = service.recommend(USER_LATITUDE, USER_LONGITUDE);
+        List<CourseRecommendResponse> result = service.recommend(USER_LATITUDE, USER_LONGITUDE, 5000);
 
         assertThat(result).extracting(CourseRecommendResponse::name)
                 .containsExactly("가까운 코스", "중간 코스", "먼 코스");
@@ -47,7 +47,7 @@ class CourseRecommendServiceTest {
         RunningCourse track = course("400m 트랙", 37.5252, 126.9295);
         when(repository.findByFlatTrue()).thenReturn(List.of(track));
 
-        CourseRecommendResponse response = service.recommend(USER_LATITUDE, USER_LONGITUDE).getFirst();
+        CourseRecommendResponse response = service.recommend(USER_LATITUDE, USER_LONGITUDE, 5000).getFirst();
 
         assertThat(response.name()).isEqualTo("400m 트랙");
         assertThat(response.type()).isEqualTo(CourseType.LOOP);
@@ -55,6 +55,7 @@ class CourseRecommendServiceTest {
         assertThat(response.distanceToStartMeters()).isBetween(470, 480);
         assertThat(response.mapUrl())
                 .isEqualTo("https://map.kakao.com/link/map/400m%20%ED%8A%B8%EB%9E%99,37.5252,126.9295");
+        assertThat(response.runPlan().description()).isEqualTo("12바퀴 + 200m");
     }
 
     @Test
@@ -62,7 +63,7 @@ class CourseRecommendServiceTest {
     void emptyWhenNoFlatCourse() {
         when(repository.findByFlatTrue()).thenReturn(List.of());
 
-        assertThat(service.recommend(USER_LATITUDE, USER_LONGITUDE)).isEmpty();
+        assertThat(service.recommend(USER_LATITUDE, USER_LONGITUDE, 5000)).isEmpty();
     }
 
     private static RunningCourse course(String name, double latitude, double longitude) {

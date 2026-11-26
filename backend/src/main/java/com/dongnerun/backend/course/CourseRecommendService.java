@@ -16,13 +16,17 @@ public class CourseRecommendService {
     }
 
     /**
-     * 평지 코스를 사용자 위치에서 출발점까지 가까운 순으로 정렬해 돌려준다.
+     * 평지 코스를 사용자 위치에서 출발점까지 가까운 순으로 정렬하고,
+     * 목표 거리를 채우는 방법(바퀴 수·왕복 횟수)을 함께 돌려준다.
      */
     @Transactional(readOnly = true)
-    public List<CourseRecommendResponse> recommend(double latitude, double longitude) {
+    public List<CourseRecommendResponse> recommend(double latitude, double longitude, int targetMeters) {
         return repository.findByFlatTrue().stream()
-                .map(course -> CourseRecommendResponse.of(course, DistanceCalculator.metersBetween(
-                        latitude, longitude, course.getStartLatitude(), course.getStartLongitude())))
+                .map(course -> CourseRecommendResponse.of(
+                        course,
+                        DistanceCalculator.metersBetween(
+                                latitude, longitude, course.getStartLatitude(), course.getStartLongitude()),
+                        RunPlan.of(course.getType(), course.getDistanceMeters(), targetMeters)))
                 .sorted(Comparator.comparingInt(CourseRecommendResponse::distanceToStartMeters))
                 .toList();
     }
