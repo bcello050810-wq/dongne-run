@@ -1,8 +1,8 @@
-package com.dongnerun.backend.course.dto;
+package com.dongnerun.backend.service.dto;
 
-import com.dongnerun.backend.course.RunPlan;
-import com.dongnerun.backend.course.CourseType;
-import com.dongnerun.backend.course.RunningCourse;
+import com.dongnerun.backend.service.RunPlan;
+import com.dongnerun.backend.data.CourseType;
+import com.dongnerun.backend.data.RunningCourse;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 

@@ -1,8 +1,10 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.service;
 
-import com.dongnerun.backend.course.dto.CourseRecommendResponse;
+import com.dongnerun.backend.service.dto.CourseRecommendResponse;
 import java.util.Comparator;
 import java.util.List;
+
+import com.dongnerun.backend.data.RunningCourseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

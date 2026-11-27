@@ -1,4 +1,6 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.service;
+
+import com.dongnerun.backend.data.CourseType;
 
 /**
  * 목표 거리를 채우기 위해 코스를 몇 번 돌거나 왕복해야 하는지 나타낸다.

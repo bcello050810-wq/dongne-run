@@ -1,7 +1,11 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.presentation;
 
-import com.dongnerun.backend.course.dto.CourseRecommendResponse;
+import com.dongnerun.backend.service.CourseRecommendService;
+import com.dongnerun.backend.service.dto.CourseRecommendResponse;
 import java.util.List;
+
+import com.dongnerun.backend.data.RunningCourse;
+import com.dongnerun.backend.data.RunningCourseRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

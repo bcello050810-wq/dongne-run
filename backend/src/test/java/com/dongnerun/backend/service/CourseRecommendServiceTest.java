@@ -1,11 +1,15 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.dongnerun.backend.course.dto.CourseRecommendResponse;
+import com.dongnerun.backend.service.dto.CourseRecommendResponse;
 import java.util.List;
+
+import com.dongnerun.backend.data.CourseType;
+import com.dongnerun.backend.data.RunningCourse;
+import com.dongnerun.backend.data.RunningCourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

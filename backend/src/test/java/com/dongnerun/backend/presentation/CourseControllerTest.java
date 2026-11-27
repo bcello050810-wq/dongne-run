@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.presentation;
 
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -10,8 +10,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.dongnerun.backend.course.dto.CourseRecommendResponse;
+import com.dongnerun.backend.service.CourseRecommendService;
+import com.dongnerun.backend.service.RunPlan;
+import com.dongnerun.backend.service.dto.CourseRecommendResponse;
 import java.util.List;
+
+import com.dongnerun.backend.data.CourseType;
+import com.dongnerun.backend.data.RunningCourse;
+import com.dongnerun.backend.data.RunningCourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
