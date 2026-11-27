@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.service;
 
 /**
  * 위도·경도 두 지점 사이의 직선거리를 계산한다.

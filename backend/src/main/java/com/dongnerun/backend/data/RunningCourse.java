@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.data;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

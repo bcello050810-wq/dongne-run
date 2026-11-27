@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;

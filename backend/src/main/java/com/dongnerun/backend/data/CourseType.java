@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.data;
 
 public enum CourseType {
     LOOP,

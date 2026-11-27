@@ -1,7 +1,8 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.dongnerun.backend.data.CourseType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

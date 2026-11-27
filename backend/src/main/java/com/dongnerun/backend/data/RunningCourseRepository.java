@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.data;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

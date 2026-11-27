@@ -1,4 +1,4 @@
-package com.dongnerun.backend.course;
+package com.dongnerun.backend.presentation;
 
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -10,7 +10,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.dongnerun.backend.course.dto.CourseRecommendResponse;
+import com.dongnerun.backend.data.CourseType;
+import com.dongnerun.backend.data.RunningCourse;
+import com.dongnerun.backend.service.CourseRecommendService;
+import com.dongnerun.backend.service.CourseService;
+import com.dongnerun.backend.service.RunPlan;
+import com.dongnerun.backend.service.dto.CourseRecommendResponse;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +31,10 @@ class CourseControllerTest {
     @BeforeEach
     void setUp() {
         recommendService = mock(CourseRecommendService.class);
-        CourseController controller = new CourseController(mock(RunningCourseRepository.class), recommendService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        CourseController controller = new CourseController(mock(CourseService.class), recommendService);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
     }
 
     @Test
@@ -50,13 +57,15 @@ class CourseControllerTest {
     }
 
     @Test
-    @DisplayName("목표 거리가 0 이하이면 400을 돌려준다")
+    @DisplayName("목표 거리가 0 이하이면 400과 에러 메시지를 돌려준다")
     void rejectsNonPositiveTarget() throws Exception {
         mockMvc.perform(get("/api/courses/recommend")
                         .param("lat", "37.5284")
                         .param("lng", "126.9331")
                         .param("targetKm", "0"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("목표 거리는 1~50km 사이여야 합니다."));
 
         verify(recommendService, never()).recommend(anyDouble(), anyDouble(), anyInt());
     }
@@ -68,15 +77,42 @@ class CourseControllerTest {
                         .param("lat", "91")
                         .param("lng", "126.9331")
                         .param("targetKm", "5"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("위도·경도 범위가 올바르지 않습니다."));
     }
 
     @Test
-    @DisplayName("필수 파라미터가 빠지면 400을 돌려준다")
+    @DisplayName("필수 파라미터가 빠지면 어떤 값이 없는지 알려준다")
     void rejectsMissingParameter() throws Exception {
         mockMvc.perform(get("/api/courses/recommend")
                         .param("lat", "37.5284")
                         .param("lng", "126.9331"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("필수 값 'targetKm'이(가) 없습니다."));
+    }
+
+    @Test
+    @DisplayName("숫자 자리에 문자가 오면 400을 돌려준다")
+    void rejectsWrongType() throws Exception {
+        mockMvc.perform(get("/api/courses/recommend")
+                        .param("lat", "37.5284")
+                        .param("lng", "126.9331")
+                        .param("targetKm", "abc"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("'targetKm' 값의 형식이 올바르지 않습니다."));
+    }
+
+    @Test
+    @DisplayName("예상하지 못한 오류는 500과 일반 메시지로 감춘다")
+    void hidesUnexpectedError() throws Exception {
+        when(recommendService.recommend(anyDouble(), anyDouble(), anyInt()))
+                .thenThrow(new IllegalStateException("DB 연결 실패"));
+
+        mockMvc.perform(get("/api/courses/recommend")
+                        .param("lat", "37.5284")
+                        .param("lng", "126.9331")
+                        .param("targetKm", "5"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("서버에서 오류가 발생했습니다."));
     }
 }
